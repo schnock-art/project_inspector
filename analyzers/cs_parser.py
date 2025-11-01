@@ -147,7 +147,21 @@ class CSharpParser:
                     summary=method_summary,
                     is_constructor=is_constructor
                 ))
+            # Track dependencies from fields
+            for f in model.fields:
+                model.uses.add(f["type"])
 
+            # Track dependencies from method params & return types
+            for method in model.methods:
+                if method.return_type:
+                    model.uses.add(method.return_type)
+                for p_type, _ in method.params:
+                    model.uses.add(p_type)
+
+            for base in model.inherits:
+                model.uses.add(base)
+                
+            model.uses.discard(model.name)
             classes.append(model)
 
         return classes

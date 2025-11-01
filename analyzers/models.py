@@ -19,3 +19,12 @@ class ClassModel:
     filename: Optional[str] = None
     fields=[]
     is_interface: bool = False
+    uses: set = None
+
+    def __post_init__(self):
+        if self.fields is None:
+            self.fields = []
+        if self.methods is None:
+            self.methods = []
+        if self.uses is None:
+            self.uses = set()

@@ -22,6 +22,7 @@ def main():
     parser.add_argument("--classes", action="store_true", help="List classes")
     parser.add_argument("--methods", action="store_true", help="List methods")
     parser.add_argument("--summaries", action="store_true", help="Extract XML doc summaries")
+    parser.add_argument("--mermaid", action="store_true", help="Generate Mermaid class diagram")
 
     parser.add_argument("--output", "-o", type=str, help="Write to file instead of stdout")
     parser.add_argument("--format", "-f", default="md", choices=["md", "txt", "html"],
@@ -62,7 +63,10 @@ def main():
                         if m.summary and args.summaries:
                             content += f"  - *{m.summary}*\n"
 
-
+        if args.mermaid:
+            from writers.mermaid_writer import MermaidWriter
+            writer = MermaidWriter()
+            content += writer.render(models) + "\n\n"
     # Choose writer
     writer = {
         "md": MarkdownWriter,

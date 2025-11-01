@@ -975,3 +975,56 @@ _Project
 
 **Methods:**
 - `void OnInspectorGUI()`
+```mermaid
+classDiagram
+Editor <|-- MusicTimelineQueueEditor
+MusicTimelineQueueEditor ..> float?
+MusicTimelineQueueEditor ..> List<float>
+MusicTimelineQueueEditor ..> ??
+MusicTimelineQueueEditor ..> IReadOnlyCollection<string>
+MusicTimelineQueueEditor ..> Composer
+MusicTimelineQueueEditor ..> int[]>
+MusicTimelineQueueEditor ..> int[]
+MusicTimelineQueueEditor ..> List<string>
+MusicTimelineQueueEditor ..> else
+MusicTimelineQueueEditor ..> List<ScaleProfile>
+MusicTimelineQueueEditor ..> float[]
+MusicTimelineQueueEditor ..> List<int[]>>
+MusicTimelineQueueEditor ..> MusicTimelineQueue
+MusicTimelineQueueEditor ..> Chord
+MusicTimelineQueueEditor ..> Editor
+MusicTimelineQueueEditor ..> PatternEvolution
+MusicTimelineQueueEditor ..> KeyScale
+MusicTimelineQueueEditor ..> List<Chord>
+MusicTimelineQueueEditor ..> MusicalEvent
+MusicTimelineQueueEditor ..> InstrumentPreset
+MusicTimelineQueueEditor ..> float[]>
+MusicTimelineQueueEditor ..> int?
+MusicTimelineQueueEditor ..> ChordProgressionLibrary
+MusicTimelineQueueEditor ..> ScaleType
+MusicTimelineQueueEditor ..> MusicDirector
+MusicTimelineQueueEditor ..> FillStrategy
+MusicTimelineQueueEditor ..> protected
+MusicTimelineQueueEditor ..> >
+MusicTimelineQueueEditor ..> Note
+MusicTimelineQueueEditor ..> yield
+MusicTimelineQueueEditor ..> <
+MusicTimelineQueueEditor ..> List<RhythmPhraseElement>
+MusicTimelineQueueEditor ..> INoteGenerator
+MusicTimelineQueueEditor ..> IInstrumentTrack>
+MusicTimelineQueueEditor ..> List<Note>
+MusicTimelineQueueEditor ..> target
+MusicTimelineQueueEditor ..> var
+MusicTimelineQueueEditor ..> Queue<HarmonySegment>
+MusicTimelineQueueEditor ..> private
+MusicTimelineQueueEditor ..> if
+MusicTimelineQueueEditor ..> Note>
+MusicTimelineQueueEditor ..> HarmonyTimelineManager
+MusicTimelineQueueEditor ..> return
+MusicTimelineQueueEditor ..> MelodyPaceMapping
+MusicTimelineQueueEditor ..> List<Scheduled>
+MusicTimelineQueueEditor ..> ChordType
+MusicTimelineQueueEditor ..> RhythmPhraseGenerator
+MusicTimelineQueueEditor ..> List<EmotionMapping>
+```
+

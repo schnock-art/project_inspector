@@ -6,9 +6,12 @@ from pathlib import Path
 from writers.md_writer import MarkdownWriter
 from writers.txt_writer import TextWriter
 from writers.html_writer import HTMLWriter
+from writers.mermaid_writer import MermaidWriter
+
 
 from analyzers.folder_tree import FolderTreeAnalyzer
 from analyzers.cs_parser import CSharpParser
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -43,15 +46,22 @@ def main():
         analyzer = FolderTreeAnalyzer(project_path)
         content += analyzer.generate()
 
-    if args.classes:
+    if args.mermaid:
+        mermaid_writer = MermaidWriter()
+        mermaid_content = ""
+    all_classes = []  # ✅ collect everything once
+    if args.classes or args.mermaid:
         parser = CSharpParser()
         for file in project_path.rglob("*.cs"):
             models = parser.parse_file(file)
+            all_classes.extend(models)  # ✅ store globally
+
             for cls in models:
                 content += f"\n### {cls.name}: \n"
                 if cls.summary and args.summaries:
                     content += f"> {cls.summary}\n\n"
                 content += f"**File:** `{cls.filename}`\n\n"
+
                 if cls.inherits:
                     content += f"**Inherits:** {', '.join(cls.inherits)}\n\n"
                 
@@ -63,10 +73,37 @@ def main():
                         if m.summary and args.summaries:
                             content += f"  - *{m.summary}*\n"
 
-        if args.mermaid:
-            from writers.mermaid_writer import MermaidWriter
-            writer = MermaidWriter()
-            content += writer.render(models) + "\n\n"
+            if args.mermaid:
+                current_class_mermaid = mermaid_writer.render(models) + "\n\n"
+                mermaid_content += current_class_mermaid
+                content += current_class_mermaid
+
+    # -------------------------------
+    # 🌍 GLOBAL UML ARCHITECTURE DIAGRAM
+    # -------------------------------
+    if args.mermaid and all_classes:
+        content += "\n## Global Architecture Diagram\n"
+        content += "```mermaid\nclassDiagram\n"
+
+        class_names = {cls.name for cls in all_classes}
+
+        edges = set()
+
+        for cls in all_classes:
+            # inheritance edges
+            for base in cls.inherits:
+                if base in class_names:
+                    edges.add(f"{base} <|-- {cls.name}")
+
+            # usage edges
+            for dep in cls.uses:
+                if dep in class_names:
+                    edges.add(f"{cls.name} --> {dep}")
+
+        for e in sorted(edges):
+            content += e + "\n"
+
+
     # Choose writer
     writer = {
         "md": MarkdownWriter,

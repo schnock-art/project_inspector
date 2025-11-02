@@ -664,7 +664,7 @@ INoteGenerator ..> KeyScale
 - `else for(int j, < 128)`
 ```mermaid
 classDiagram
-INoteGenerator <|-- MarkovMelodyGenerator
+INoteGenerator <-- MarkovMelodyGenerator
 MarkovMelodyGenerator ..> List
 MarkovMelodyGenerator ..> Note
 MarkovMelodyGenerator ..> KeyScale

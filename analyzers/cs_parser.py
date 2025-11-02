@@ -56,6 +56,8 @@ class CSharpParser:
     }
     UNITY_ATTRIBUTES = {"Tooltip","Header","Range","Space","SerializeField", "HideInInspector"}
 
+    COLLECTION_TYPES = {"List", "Dictionary", "HashSet", "Queue", "Stack"}
+
     def _filter_type(self, t: str) -> List[str]:
         """
         Extract meaningful type names (handles generics like List<Note>)
@@ -71,7 +73,7 @@ class CSharpParser:
             parts.append(t)
 
         ignore = self.CS_KEYWORDS | self.UNITY_EDITOR_WORDS | \
-                 self.BUILTINS | self.UNITY_ATTRIBUTES
+                 self.BUILTINS | self.UNITY_ATTRIBUTES | self.COLLECTION_TYPES
 
         return [p for p in parts if p not in ignore]
 

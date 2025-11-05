@@ -4,7 +4,7 @@ class MermaidWriter:
     def render(self, classes):
         lines = ["```mermaid", "classDiagram"]
         if len(classes)==0:
-            return "\r\n"
+            return ""
         def clean_type(name: str) -> str:
             return re.sub(r"<.*?>", "", name)   # remove <T>
         

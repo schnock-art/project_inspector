@@ -144,13 +144,13 @@ _Project
 ```mermaid
 classDiagram
 MonoBehaviour <|-- Composer
+Composer ..> IInstrumentTrack>
+Composer ..> IReadOnlyCollection
+Composer ..> KeyScale
+Composer ..> MusicalEvent
+Composer ..> MonoBehaviour
 Composer ..> IReadOnlyCollection
 Composer ..> IInstrumentTrack
-Composer ..> KeyScale
-Composer ..> IReadOnlyCollection
-Composer ..> IInstrumentTrack>
-Composer ..> MonoBehaviour
-Composer ..> MusicalEvent
 ```
 
 
@@ -172,8 +172,8 @@ classDiagram
 ```mermaid
 classDiagram
 IInstrumentTrack <|-- BaseInstrumentTrack
-BaseInstrumentTrack ..> IInstrumentTrack
 BaseInstrumentTrack ..> KeyScale
+BaseInstrumentTrack ..> IInstrumentTrack
 ```
 
 
@@ -186,10 +186,10 @@ BaseInstrumentTrack ..> KeyScale
 ```mermaid
 classDiagram
 BaseInstrumentTrack <|-- HarmonyTrack
-HarmonyTrack ..> BaseInstrumentTrack
-HarmonyTrack ..> Chord
 HarmonyTrack ..> HarmonyTimelineManager
+HarmonyTrack ..> BaseInstrumentTrack
 HarmonyTrack ..> ChordProgressionLibrary
+HarmonyTrack ..> Chord
 ```
 
 
@@ -202,11 +202,11 @@ HarmonyTrack ..> ChordProgressionLibrary
 ```mermaid
 classDiagram
 BaseInstrumentTrack <|-- MelodyTrack
+MelodyTrack ..> RhythmPhraseGenerator
 MelodyTrack ..> BaseInstrumentTrack
-MelodyTrack ..> INoteGenerator
 MelodyTrack ..> Note
 MelodyTrack ..> PatternEvolution
-MelodyTrack ..> RhythmPhraseGenerator
+MelodyTrack ..> INoteGenerator
 ```
 
 
@@ -225,8 +225,8 @@ MelodyTrack ..> RhythmPhraseGenerator
 ```mermaid
 classDiagram
 MonoBehaviour <|-- MusicDirector
-MusicDirector ..> KeyScale
 MusicDirector ..> Composer
+MusicDirector ..> KeyScale
 MusicDirector ..> MusicTimelineQueue
 MusicDirector ..> MonoBehaviour
 ```
@@ -238,8 +238,8 @@ MusicDirector ..> MonoBehaviour
 **Methods:**
 ```mermaid
 classDiagram
-HarmonySegment ..> Chord
 HarmonySegment ..> KeyScale
+HarmonySegment ..> Chord
 ```
 
 
@@ -251,11 +251,11 @@ HarmonySegment ..> KeyScale
 - `List<Chord> GetNextChords(int maxBars)`
 ```mermaid
 classDiagram
-HarmonyTimelineManager ..> KeyScale
-HarmonyTimelineManager ..> Queue
 HarmonyTimelineManager ..> HarmonySegment
-HarmonyTimelineManager ..> Chord
+HarmonyTimelineManager ..> KeyScale
 HarmonyTimelineManager ..> ChordProgressionLibrary
+HarmonyTimelineManager ..> Queue
+HarmonyTimelineManager ..> Chord
 ```
 
 
@@ -270,10 +270,10 @@ HarmonyTimelineManager ..> ChordProgressionLibrary
 - `void UpdateTransportGrid(float currentBeat, int beatsPerBar)`
 ```mermaid
 classDiagram
-MusicTimelineQueueData ..> IEnumerable
-MusicTimelineQueueData ..> IEnumerable
 MusicTimelineQueueData ..> Scheduled
 MusicTimelineQueueData ..> MusicalEvent
+MusicTimelineQueueData ..> IEnumerable
+MusicTimelineQueueData ..> IEnumerable
 ```
 
 
@@ -301,11 +301,11 @@ Scheduled ..> MusicalEvent
 ```mermaid
 classDiagram
 MonoBehaviour <|-- MusicTimelineQueue
-MusicTimelineQueue ..> IEnumerable
-MusicTimelineQueue ..> IEnumerable
 MusicTimelineQueue ..> Scheduled
-MusicTimelineQueue ..> MonoBehaviour
 MusicTimelineQueue ..> MusicalEvent
+MusicTimelineQueue ..> IEnumerable
+MusicTimelineQueue ..> IEnumerable
+MusicTimelineQueue ..> MonoBehaviour
 ```
 
 
@@ -320,11 +320,11 @@ MusicTimelineQueue ..> MusicalEvent
 ```mermaid
 classDiagram
 ScriptableObject <|-- BiomeMusicSettings
+BiomeMusicSettings ..> ScaleProfile
 BiomeMusicSettings ..> InstrumentPreset
+BiomeMusicSettings ..> ScriptableObject
 BiomeMusicSettings ..> EmotionMapping
 BiomeMusicSettings ..> MelodyPaceMapping
-BiomeMusicSettings ..> ScriptableObject
-BiomeMusicSettings ..> ScaleProfile
 ```
 
 
@@ -475,8 +475,8 @@ classDiagram
 - `Note GetNote(int midiNote)`
 ```mermaid
 classDiagram
-NoteMap ..> Note
 NoteMap ..> Note>
+NoteMap ..> Note
 ```
 
 
@@ -499,8 +499,8 @@ classDiagram
 ```mermaid
 classDiagram
 RhythmPhrase ..> IEnumerable
-RhythmPhrase ..> RhythmPhraseElement
 RhythmPhrase ..> IEnumerable
+RhythmPhrase ..> RhythmPhraseElement
 ```
 
 
@@ -540,8 +540,8 @@ RhythmPhraseGenerator ..> RhythmPhrase
 ```mermaid
 classDiagram
 KeyScale ..> ChordType
-KeyScale ..> Chord
 KeyScale ..> Note
+KeyScale ..> Chord
 ```
 
 
@@ -576,8 +576,8 @@ classDiagram
 - `Chord ApplyVariations(Chord chord)`
 ```mermaid
 classDiagram
-ChordProgressionGenerator ..> Chord
 ChordProgressionGenerator ..> KeyScale
+ChordProgressionGenerator ..> Chord
 ```
 
 
@@ -589,9 +589,9 @@ ChordProgressionGenerator ..> KeyScale
 - `List<Chord> GetTransition(KeyScale from, KeyScale to)`
 ```mermaid
 classDiagram
-ChordProgressionLibrary ..> Chord
-ChordProgressionLibrary ..> KeyScale
 ChordProgressionLibrary ..> List>
+ChordProgressionLibrary ..> KeyScale
+ChordProgressionLibrary ..> Chord
 ```
 
 
@@ -620,9 +620,9 @@ classDiagram
 ```mermaid
 classDiagram
 INoteGenerator <|-- MarkovMelodyGenerator
-MarkovMelodyGenerator ..> Note
 MarkovMelodyGenerator ..> KeyScale
 MarkovMelodyGenerator ..> INoteGenerator
+MarkovMelodyGenerator ..> Note
 ```
 
 
@@ -639,8 +639,8 @@ MarkovMelodyGenerator ..> INoteGenerator
 classDiagram
 INoteGenerator <|-- RuleMelodyGenerator
 RuleMelodyGenerator ..> KeyScale
-RuleMelodyGenerator ..> INoteGenerator
 RuleMelodyGenerator ..> Note
+RuleMelodyGenerator ..> INoteGenerator
 ```
 
 
@@ -654,12 +654,12 @@ RuleMelodyGenerator ..> Note
 - `MelodyPhrase MutateMelody(MelodyPhrase baseMelody, KeyScale key)`
 ```mermaid
 classDiagram
-PatternEvolution ..> KeyScale
 PatternEvolution ..> MelodyPhrase
-PatternEvolution ..> INoteGenerator
+PatternEvolution ..> RhythmPhraseGenerator
+PatternEvolution ..> KeyScale
 PatternEvolution ..> RhythmPhrase
 PatternEvolution ..> Note
-PatternEvolution ..> RhythmPhraseGenerator
+PatternEvolution ..> INoteGenerator
 ```
 
 

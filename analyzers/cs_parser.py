@@ -23,7 +23,7 @@ class CSharpParser:
     METHOD_RE = re.compile(
         r"(?:\/\/\/\s*<summary>\s*(?P<summary>.*?)\s*<\/summary>\s*)?"
         r"(?:\[.*?\]\s*)*"
-        r"(?:public|private|internal|protected)?\s*"
+        r"(?:public|private|internal|protected)\s*"
         r"(?P<return>\w[\w<>?]*)\s+"
         r"(?P<name>\w+)\s*"
         r"\((?P<params>[^)]*)\)",
@@ -74,17 +74,9 @@ class CSharpParser:
 
         ignore = self.CS_KEYWORDS | self.UNITY_EDITOR_WORDS | \
                  self.BUILTINS | self.UNITY_ATTRIBUTES | self.COLLECTION_TYPES
-        
-        cleaned = []
-        for p in parts:
-            if p in ignore: 
-                continue
-            if p.startswith(("List", "Dictionary", "HashSet", "Queue", "Stack", "IEnumerable")):
-                continue
-            cleaned.append(p)
 
-        return cleaned
-    
+        return [p for p in parts if p not in ignore]
+
     @staticmethod
     def extract_comment_above(code: str, pattern: str):
         idx = code.find(pattern)
@@ -185,6 +177,11 @@ class CSharpParser:
                     model.uses.add(t)
 
             model.uses.discard(model.name)
+
+            ignore = self.CS_KEYWORDS | self.UNITY_EDITOR_WORDS | \
+                 self.BUILTINS | self.UNITY_ATTRIBUTES | self.COLLECTION_TYPES
+            model.uses = {u for u in model.uses if u not in ignore}
+            print(model.uses)
             classes.append(model)
 
         return classes

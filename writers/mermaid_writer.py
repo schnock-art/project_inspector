@@ -14,7 +14,7 @@ class MermaidWriter:
             for dep in cls.uses:
                 dep = clean_type(dep)
                 # Skip primitives & system types
-                if dep in {"int", "float", "double", "string", "bool", "void"}:
+                if dep in {"int", "float", "double", "string", "bool", "void", "List"}:
                     continue
                 cls_name = clean_type(cls.name)
                 lines.append(f"{cls_name} ..> {dep}")  # usage

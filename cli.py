@@ -76,10 +76,10 @@ def main():
                         if m.summary and args.summaries:
                             content += f"  - *{m.summary}*\n"
 
-            if args.mermaid:
-                current_class_mermaid = mermaid_writer.render(models) + "\n\n"
-                mermaid_content += current_class_mermaid
-                content += current_class_mermaid
+                if args.mermaid:
+                    current_class_mermaid = mermaid_writer.render([cls]) + "\n\n"
+                    mermaid_content += current_class_mermaid
+                    content += current_class_mermaid
 
     # -------------------------------
     # 🌍 GLOBAL UML ARCHITECTURE DIAGRAM

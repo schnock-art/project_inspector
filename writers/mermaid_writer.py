@@ -3,8 +3,10 @@ import re
 class MermaidWriter:  
     def render(self, classes):
         lines = ["```mermaid", "classDiagram"]
+        
         def clean_type(name: str) -> str:
             return re.sub(r"<.*?>", "", name)   # remove <T>
+        
         for cls in classes:
             for base in cls.inherits:
                 lines.append(f"{base} <|-- {cls.name}")  # inheritance

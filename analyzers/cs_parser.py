@@ -74,9 +74,17 @@ class CSharpParser:
 
         ignore = self.CS_KEYWORDS | self.UNITY_EDITOR_WORDS | \
                  self.BUILTINS | self.UNITY_ATTRIBUTES | self.COLLECTION_TYPES
+        
+        cleaned = []
+        for p in parts:
+            if p in ignore: 
+                continue
+            if p.startswith(("List", "Dictionary", "HashSet", "Queue", "Stack", "IEnumerable")):
+                continue
+            cleaned.append(p)
 
-        return [p for p in parts if p not in ignore]
-
+        return cleaned
+    
     @staticmethod
     def extract_comment_above(code: str, pattern: str):
         idx = code.find(pattern)

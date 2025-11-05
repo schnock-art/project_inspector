@@ -69,7 +69,10 @@ def main():
                     content += "**Methods:**\n"
                     for m in cls.methods:
                         params = ", ".join(f"{t} {n}" for t, n in m.params)
-                        content += f"- `{m.return_type} {m.name}({params})`\n"
+                        if m.is_constructor:
+                            content += f"- `[constructor] {m.return_type} {m.name}({params})`\n"
+                        else:
+                            content += f"- `{m.return_type} {m.name}({params})`\n"
                         if m.summary and args.summaries:
                             content += f"  - *{m.summary}*\n"
 

@@ -144,13 +144,11 @@ _Project
 ```mermaid
 classDiagram
 MonoBehaviour <|-- Composer
-Composer ..> IInstrumentTrack>
-Composer ..> IReadOnlyCollection
-Composer ..> KeyScale
-Composer ..> MusicalEvent
+Composer ..> Dictionary
 Composer ..> MonoBehaviour
-Composer ..> IReadOnlyCollection
+Composer ..> MusicalEvent
 Composer ..> IInstrumentTrack
+Composer ..> KeyScale
 ```
 
 
@@ -169,11 +167,12 @@ classDiagram
 **Inherits:** IInstrumentTrack
 
 **Methods:**
+- `bool KeyEquals(KeyScale a, KeyScale b)`
 ```mermaid
 classDiagram
 IInstrumentTrack <|-- BaseInstrumentTrack
-BaseInstrumentTrack ..> KeyScale
 BaseInstrumentTrack ..> IInstrumentTrack
+BaseInstrumentTrack ..> KeyScale
 ```
 
 
@@ -186,10 +185,9 @@ BaseInstrumentTrack ..> IInstrumentTrack
 ```mermaid
 classDiagram
 BaseInstrumentTrack <|-- HarmonyTrack
-HarmonyTrack ..> HarmonyTimelineManager
-HarmonyTrack ..> BaseInstrumentTrack
 HarmonyTrack ..> ChordProgressionLibrary
-HarmonyTrack ..> Chord
+HarmonyTrack ..> BaseInstrumentTrack
+HarmonyTrack ..> HarmonyTimelineManager
 ```
 
 
@@ -202,11 +200,10 @@ HarmonyTrack ..> Chord
 ```mermaid
 classDiagram
 BaseInstrumentTrack <|-- MelodyTrack
-MelodyTrack ..> RhythmPhraseGenerator
-MelodyTrack ..> BaseInstrumentTrack
-MelodyTrack ..> Note
-MelodyTrack ..> PatternEvolution
 MelodyTrack ..> INoteGenerator
+MelodyTrack ..> BaseInstrumentTrack
+MelodyTrack ..> RhythmPhraseGenerator
+MelodyTrack ..> PatternEvolution
 ```
 
 
@@ -225,10 +222,10 @@ MelodyTrack ..> INoteGenerator
 ```mermaid
 classDiagram
 MonoBehaviour <|-- MusicDirector
+MusicDirector ..> MonoBehaviour
+MusicDirector ..> MusicTimelineQueue
 MusicDirector ..> Composer
 MusicDirector ..> KeyScale
-MusicDirector ..> MusicTimelineQueue
-MusicDirector ..> MonoBehaviour
 ```
 
 
@@ -238,8 +235,8 @@ MusicDirector ..> MonoBehaviour
 **Methods:**
 ```mermaid
 classDiagram
-HarmonySegment ..> KeyScale
 HarmonySegment ..> Chord
+HarmonySegment ..> KeyScale
 ```
 
 
@@ -251,11 +248,11 @@ HarmonySegment ..> Chord
 - `List<Chord> GetNextChords(int maxBars)`
 ```mermaid
 classDiagram
+HarmonyTimelineManager ..> Chord
 HarmonyTimelineManager ..> HarmonySegment
+HarmonyTimelineManager ..> Queue
 HarmonyTimelineManager ..> KeyScale
 HarmonyTimelineManager ..> ChordProgressionLibrary
-HarmonyTimelineManager ..> Queue
-HarmonyTimelineManager ..> Chord
 ```
 
 
@@ -303,9 +300,9 @@ classDiagram
 MonoBehaviour <|-- MusicTimelineQueue
 MusicTimelineQueue ..> Scheduled
 MusicTimelineQueue ..> MusicalEvent
-MusicTimelineQueue ..> IEnumerable
-MusicTimelineQueue ..> IEnumerable
 MusicTimelineQueue ..> MonoBehaviour
+MusicTimelineQueue ..> IEnumerable
+MusicTimelineQueue ..> IEnumerable
 ```
 
 
@@ -320,11 +317,11 @@ MusicTimelineQueue ..> MonoBehaviour
 ```mermaid
 classDiagram
 ScriptableObject <|-- BiomeMusicSettings
-BiomeMusicSettings ..> ScaleProfile
-BiomeMusicSettings ..> InstrumentPreset
-BiomeMusicSettings ..> ScriptableObject
-BiomeMusicSettings ..> EmotionMapping
 BiomeMusicSettings ..> MelodyPaceMapping
+BiomeMusicSettings ..> EmotionMapping
+BiomeMusicSettings ..> ScaleProfile
+BiomeMusicSettings ..> ScriptableObject
+BiomeMusicSettings ..> InstrumentPreset
 ```
 
 
@@ -374,12 +371,15 @@ classDiagram
 **Methods:**
 - `void OnEnable()`
 - `void OnValidate()`
+- `void SubscribeToTempoChange(Action<float> listener)`
 - `void Apply()`
 - `void SetTempo(float newTempo)`
 ```mermaid
 classDiagram
 ScriptableObject <|-- MusicGenSettings
 MusicGenSettings ..> ScriptableObject
+MusicGenSettings ..> Action
+MusicGenSettings ..> Action
 ```
 
 
@@ -424,8 +424,8 @@ TestMusicSetup ..> MusicDirector
 - `List<Note> GetArpeggio(ArpeggioStyle style, int octaves)`
 ```mermaid
 classDiagram
-Chord ..> ArpeggioStyle
 Chord ..> Note
+Chord ..> ArpeggioStyle
 ```
 
 
@@ -453,9 +453,24 @@ MelodyPhrase ..> Note
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Core\Melody\MelodyPhraseExtensions.Basic.cs`
 
 **Methods:**
+- `MelodyPhrase Transpose(this MelodyPhrase, int semitones)`
+- `MelodyPhrase SwapAdjacent(this MelodyPhrase, float probability)`
+- `MelodyPhrase InvertAround(this MelodyPhrase, Note axis)`
+- `MelodyPhrase ConstrainToScale(this MelodyPhrase, KeyScale scale, int min, int max)`
+- `void InsertNote(this MelodyPhrase, int index, Note note)`
+- `void AddNote(this MelodyPhrase, Note note)`
+- `void RemoveNoteAt(this MelodyPhrase, int index)`
+- `bool RemoveRandomNote(this MelodyPhrase, Random rng)`
+- `void RemoveNotes(this MelodyPhrase, int count, Random rng)`
+- `void InsertNeighborNote(this MelodyPhrase, int index, KeyScale scale, int minStep, int maxStep, Random rng)`
+- `void AddMultipleNotes(this MelodyPhrase, int count, KeyScale scale, Random rng)`
+- `void InsertMusicalNote(this MelodyPhrase, KeyScale scale, Random rng)`
 ```mermaid
 classDiagram
+MelodyPhraseExtensions ..> Random
+MelodyPhraseExtensions ..> MelodyPhrase
 MelodyPhraseExtensions ..> Note
+MelodyPhraseExtensions ..> KeyScale
 ```
 
 
@@ -475,8 +490,8 @@ classDiagram
 - `Note GetNote(int midiNote)`
 ```mermaid
 classDiagram
-NoteMap ..> Note>
 NoteMap ..> Note
+NoteMap ..> Dictionary
 ```
 
 
@@ -484,8 +499,15 @@ NoteMap ..> Note
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Core\Notes\NoteUtilities.cs`
 
 **Methods:**
+- `float MidiToFrequency(int midiNote)`
+- `int FrequencyToMidi(float frequency)`
+- `Note Transpose(Note note, int semitones)`
+- `int Interval(Note a, Note b)`
+- `string GetNoteNameFromMidi(int midiNote)`
+- `List<string> RangeNames(int startMidi, int endMidi)`
 ```mermaid
 classDiagram
+NoteUtilities ..> Note
 ```
 
 
@@ -499,8 +521,8 @@ classDiagram
 ```mermaid
 classDiagram
 RhythmPhrase ..> IEnumerable
-RhythmPhrase ..> IEnumerable
 RhythmPhrase ..> RhythmPhraseElement
+RhythmPhrase ..> IEnumerable
 ```
 
 
@@ -508,6 +530,7 @@ RhythmPhrase ..> RhythmPhraseElement
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Core\Rythm\RhythmPhraseExtensions.cs`
 
 **Methods:**
+- `void NormalizeToBeats(this RhythmPhrase, float targetBeats)`
 ```mermaid
 classDiagram
 ```
@@ -519,10 +542,16 @@ classDiagram
 **Methods:**
 - `RhythmPhrase GenerateSmart(int beatsPerBar, int numBars, int numHits, FillStrategy strategy, int seed, bool randomizeOrder)`
 - `RhythmPhrase GenerateSubdividedVariation(RhythmPhrase basePhrase, float intensity, int seed)`
+- `List<float> InitializeDurations(int numHits, float target)`
+- `void ApplyDeterministicCorrection(List<float> durations, float diff)`
+- `void ApplyStochasticAdjustment(List<float> durations, float diff)`
+- `float SnapToClosestMusicalValue(float val)`
+- `float TryHalve(float dur)`
+- `float TryDouble(float dur)`
 ```mermaid
 classDiagram
-RhythmPhraseGenerator ..> FillStrategy
 RhythmPhraseGenerator ..> RhythmPhrase
+RhythmPhraseGenerator ..> FillStrategy
 ```
 
 
@@ -539,9 +568,8 @@ RhythmPhraseGenerator ..> RhythmPhrase
 - `Chord GetChord(int degree, bool useSevenths)`
 ```mermaid
 classDiagram
-KeyScale ..> ChordType
-KeyScale ..> Note
 KeyScale ..> Chord
+KeyScale ..> Note
 ```
 
 
@@ -558,8 +586,16 @@ classDiagram
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Core\Scales\ScaleUtils.cs`
 
 **Methods:**
+- `HashSet<int> PitchClasses(KeyScale ks)`
+- `HashSet<int> PitchClassIntersection(KeyScale a, KeyScale b)`
+- `List<int> NotesInRange(KeyScale ks, int midiMin, int midiMax)`
+- `int NearestCommonTone(int sourceMidi, KeyScale src, KeyScale dst, int midiMin, int midiMax)`
+- `int NearestScaleNote(int sourceMidi, KeyScale ks, int midiMin, int midiMax)`
+- `bool ContainsPitchClass(this KeyScale, int pitchClass)`
 ```mermaid
 classDiagram
+ScaleUtils ..> HashSet
+ScaleUtils ..> KeyScale
 ```
 
 
@@ -574,10 +610,11 @@ classDiagram
 - `Chord FindPivotChord(KeyScale a, KeyScale b)`
 - `Chord PickNextChord(Chord current, List<Chord> pool, KeyScale currentKey, KeyScale targetKey, float modulationBias)`
 - `Chord ApplyVariations(Chord chord)`
+- `float BaseFunctionalScore(int from, int to)`
 ```mermaid
 classDiagram
-ChordProgressionGenerator ..> KeyScale
 ChordProgressionGenerator ..> Chord
+ChordProgressionGenerator ..> KeyScale
 ```
 
 
@@ -589,9 +626,8 @@ ChordProgressionGenerator ..> Chord
 - `List<Chord> GetTransition(KeyScale from, KeyScale to)`
 ```mermaid
 classDiagram
-ChordProgressionLibrary ..> List>
-ChordProgressionLibrary ..> KeyScale
 ChordProgressionLibrary ..> Chord
+ChordProgressionLibrary ..> KeyScale
 ```
 
 
@@ -620,9 +656,9 @@ classDiagram
 ```mermaid
 classDiagram
 INoteGenerator <|-- MarkovMelodyGenerator
-MarkovMelodyGenerator ..> KeyScale
 MarkovMelodyGenerator ..> INoteGenerator
 MarkovMelodyGenerator ..> Note
+MarkovMelodyGenerator ..> KeyScale
 ```
 
 
@@ -638,9 +674,9 @@ MarkovMelodyGenerator ..> Note
 ```mermaid
 classDiagram
 INoteGenerator <|-- RuleMelodyGenerator
-RuleMelodyGenerator ..> KeyScale
-RuleMelodyGenerator ..> Note
 RuleMelodyGenerator ..> INoteGenerator
+RuleMelodyGenerator ..> Note
+RuleMelodyGenerator ..> KeyScale
 ```
 
 
@@ -655,11 +691,10 @@ RuleMelodyGenerator ..> INoteGenerator
 ```mermaid
 classDiagram
 PatternEvolution ..> MelodyPhrase
+PatternEvolution ..> INoteGenerator
 PatternEvolution ..> RhythmPhraseGenerator
 PatternEvolution ..> KeyScale
 PatternEvolution ..> RhythmPhrase
-PatternEvolution ..> Note
-PatternEvolution ..> INoteGenerator
 ```
 
 
@@ -701,7 +736,6 @@ HarmonyTimelineManager --> ChordProgressionLibrary
 HarmonyTimelineManager --> HarmonySegment
 HarmonyTimelineManager --> KeyScale
 HarmonyTrack --> BaseInstrumentTrack
-HarmonyTrack --> Chord
 HarmonyTrack --> ChordProgressionLibrary
 HarmonyTrack --> HarmonyTimelineManager
 IInstrumentTrack <|-- BaseInstrumentTrack
@@ -713,10 +747,11 @@ MarkovMelodyGenerator --> INoteGenerator
 MarkovMelodyGenerator --> KeyScale
 MarkovMelodyGenerator --> Note
 MelodyPhrase --> Note
+MelodyPhraseExtensions --> KeyScale
+MelodyPhraseExtensions --> MelodyPhrase
 MelodyPhraseExtensions --> Note
 MelodyTrack --> BaseInstrumentTrack
 MelodyTrack --> INoteGenerator
-MelodyTrack --> Note
 MelodyTrack --> PatternEvolution
 MelodyTrack --> RhythmPhraseGenerator
 MusicDirector --> Composer
@@ -727,15 +762,16 @@ MusicTimelineQueue --> Scheduled
 MusicTimelineQueueData --> MusicalEvent
 MusicTimelineQueueData --> Scheduled
 NoteMap --> Note
+NoteUtilities --> Note
 PatternEvolution --> INoteGenerator
 PatternEvolution --> KeyScale
 PatternEvolution --> MelodyPhrase
-PatternEvolution --> Note
 PatternEvolution --> RhythmPhrase
 PatternEvolution --> RhythmPhraseGenerator
 RhythmPhraseGenerator --> RhythmPhrase
 RuleMelodyGenerator --> INoteGenerator
 RuleMelodyGenerator --> KeyScale
 RuleMelodyGenerator --> Note
+ScaleUtils --> KeyScale
 Scheduled --> MusicalEvent
 TestMusicSetup --> MusicDirector

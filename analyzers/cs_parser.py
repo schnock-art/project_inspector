@@ -23,16 +23,16 @@ class CSharpParser:
     METHOD_RE = re.compile(
         r"(?:\/\/\/\s*<summary>\s*(?P<summary>.*?)\s*<\/summary>\s*)?"
         r"(?:\[.*?\]\s*)*"
-        r"(?:public|private|internal|protected)\s*"
-        r"(?P<return>\w[\w<>?]*)\s+"
+        r"(?:public|private|protected|internal|static)+\s+(readonly\s+)?"
+        r"(?P<return>\w+(<\w+(,\s+\w+)?>)?)\s+"
         r"(?P<name>\w+)\s*"
         r"\((?P<params>[^)]*)\)",
         re.DOTALL
     )
 
     FIELD_RE = re.compile(
-        r"(?:public|private|protected|internal|static|\s)+"
-        r"(?P<type>[\w<>\[\]?]+)\s+"
+        r"(?:public|private|protected|internal|static)+\s+(readonly\s+)?"
+        r"(?P<type>\w+(<\w+(,\s+\w+)?>)?)\s+"
         r"(?P<name>\w+)"
         r"(?:\s*=\s*[^;]+)?;",
         re.MULTILINE
@@ -56,7 +56,10 @@ class CSharpParser:
     }
     UNITY_ATTRIBUTES = {"Tooltip","Header","Range","Space","SerializeField", "HideInInspector"}
 
-    COLLECTION_TYPES = {"List", "Dictionary", "HashSet", "Queue", "Stack"}
+    COLLECTION_TYPES = {"List", "Dictionary", "HashSet", "Queue", "Stack", "IReadOnlyCollection"}
+
+    IGNORE_TYPES = CS_KEYWORDS | UNITY_EDITOR_WORDS | \
+                 BUILTINS | UNITY_ATTRIBUTES | COLLECTION_TYPES
 
     def _filter_type(self, t: str) -> List[str]:
         """
@@ -72,10 +75,7 @@ class CSharpParser:
         if re.match(r"[A-Z]\w+", t):
             parts.append(t)
 
-        ignore = self.CS_KEYWORDS | self.UNITY_EDITOR_WORDS | \
-                 self.BUILTINS | self.UNITY_ATTRIBUTES | self.COLLECTION_TYPES
-
-        return [p for p in parts if p not in ignore]
+        return [p for p in parts if p not in self.IGNORE_TYPES]
 
     @staticmethod
     def extract_comment_above(code: str, pattern: str):
@@ -99,6 +99,80 @@ class CSharpParser:
             return None
 
         return " ".join(xml_lines).strip()
+    
+    def process_class(self, c, text, path):
+        class_name = c.group("name")
+        inherits = c.group("inherits")
+        class_summary = c.group("class_summary") or ""
+
+        if not class_summary:
+            class_summary = self.extract_comment_above(text, f"class {class_name}") or ""
+
+        model = ClassModel(
+            name=class_name,
+            summary=class_summary.strip(),
+            namespace=self._find_namespace(text),
+            inherits=[i.strip() for i in inherits.split(",")] if inherits else [],
+            filename=str(path)
+        )
+
+        class_block = self._extract_class_block(text, class_name)
+
+        class_block_clean = re.sub(
+            r"=\s*new\s+[A-Za-z_]\w*\s*\([^;]*?\);",
+            "= new(/*...*/);",
+            class_block
+        )
+
+        # ✅ Fields
+        for f in self.FIELD_RE.finditer(class_block_clean):
+            f_type = f.group("type")
+            model.fields.append({"name": f.group("name"), "type": f_type})
+            for t in self._filter_type(f_type):
+                model.uses.add(t)
+
+        # ✅ Methods
+        for m in self.METHOD_RE.finditer(class_block_clean):
+            raw_params = m.group("params").strip()
+            params = [
+                (p.group("type"), p.group("name"))
+                for p in self.PARAM_RE.finditer(raw_params)
+            ] if raw_params else []
+
+            method_name = m.group("name")
+            is_constructor = (method_name == class_name)
+            return_type = None if is_constructor else m.group("return")
+
+            method_summary = m.group("summary") or ""
+            if not method_summary:
+                method_summary = self.extract_comment_above(class_block, method_name) or ""
+
+            model.methods.append(MethodModel(
+                name=method_name,
+                return_type=return_type,
+                params=params,
+                summary=method_summary,
+                is_constructor=is_constructor
+            ))
+
+            if return_type:
+                for t in self._filter_type(return_type):
+                    model.uses.add(t)
+
+            for p_type, _ in params:
+                for t in self._filter_type(p_type):
+                    model.uses.add(t)
+
+        # Base classes
+        for base in model.inherits:
+            for t in self._filter_type(base):
+                model.uses.add(t)
+
+        model.uses.discard(model.name)
+
+        model.uses = {u for u in model.uses if u not in self.IGNORE_TYPES}
+        print(model.uses)
+        return model
 
     # -------------------- PARSER CORE --------------------
     def parse_file(self, path: Path) -> List[ClassModel]:
@@ -109,81 +183,9 @@ class CSharpParser:
         classes = []
 
         for c in self.CLASS_RE.finditer(text):
-            class_name = c.group("name")
-            inherits = c.group("inherits")
-            class_summary = c.group("class_summary") or ""
-
-            if not class_summary:
-                class_summary = self.extract_comment_above(text, f"class {class_name}") or ""
-
-            model = ClassModel(
-                name=class_name,
-                summary=class_summary.strip(),
-                namespace=self._find_namespace(text),
-                inherits=[i.strip() for i in inherits.split(",")] if inherits else [],
-                filename=str(path)
+            classes.append(
+                self.process_class(c=c,text=text,path=path)
             )
-
-            class_block = self._extract_class_block(text, class_name)
-
-            class_block_clean = re.sub(
-                r"=\s*new\s+[A-Za-z_]\w*\s*\([^;]*?\);",
-                "= new(/*...*/);",
-                class_block
-            )
-
-            # ✅ Fields
-            for f in self.FIELD_RE.finditer(class_block_clean):
-                f_type = f.group("type")
-                model.fields.append({"name": f.group("name"), "type": f_type})
-                for t in self._filter_type(f_type):
-                    model.uses.add(t)
-
-            # ✅ Methods
-            for m in self.METHOD_RE.finditer(class_block_clean):
-                raw_params = m.group("params").strip()
-                params = [
-                    (p.group("type"), p.group("name"))
-                    for p in self.PARAM_RE.finditer(raw_params)
-                ] if raw_params else []
-
-                method_name = m.group("name")
-                is_constructor = (method_name == class_name)
-                return_type = None if is_constructor else m.group("return")
-
-                method_summary = m.group("summary") or ""
-                if not method_summary:
-                    method_summary = self.extract_comment_above(class_block, method_name) or ""
-
-                model.methods.append(MethodModel(
-                    name=method_name,
-                    return_type=return_type,
-                    params=params,
-                    summary=method_summary,
-                    is_constructor=is_constructor
-                ))
-
-                if return_type:
-                    for t in self._filter_type(return_type):
-                        model.uses.add(t)
-
-                for p_type, _ in params:
-                    for t in self._filter_type(p_type):
-                        model.uses.add(t)
-
-            # Base classes
-            for base in model.inherits:
-                for t in self._filter_type(base):
-                    model.uses.add(t)
-
-            model.uses.discard(model.name)
-
-            ignore = self.CS_KEYWORDS | self.UNITY_EDITOR_WORDS | \
-                 self.BUILTINS | self.UNITY_ATTRIBUTES | self.COLLECTION_TYPES
-            model.uses = {u for u in model.uses if u not in ignore}
-            print(model.uses)
-            classes.append(model)
-
         return classes
 
     # -------------------- UTILS --------------------

@@ -61,6 +61,7 @@ def main():
                 if cls.summary and args.summaries:
                     content += f"> {cls.summary}\n\n"
                 content += f"**File:** `{cls.filename}`\n\n"
+                content += f"**Namespace:** `{cls.namespace}`\n\n"
 
                 if cls.inherits:
                     content += f"**Inherits:** {', '.join(cls.inherits)}\n\n"

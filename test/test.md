@@ -131,6 +131,8 @@ _Project
 ### Composer: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Composition\Composer.cs`
 
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Composition`
+
 **Inherits:** MonoBehaviour
 
 **Methods:**
@@ -144,16 +146,18 @@ _Project
 ```mermaid
 classDiagram
 MonoBehaviour <|-- Composer
-Composer ..> Dictionary
+Composer ..> IInstrumentTrack
 Composer ..> KeyScale
 Composer ..> MonoBehaviour
-Composer ..> IInstrumentTrack
 Composer ..> MusicalEvent
+Composer ..> Dictionary
 ```
 
 
 ### IInstrumentTrack: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Composition\Composer.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Composition`
 
 **Methods:**
 
@@ -163,6 +167,8 @@ Composer ..> MusicalEvent
 ### BaseInstrumentTrack: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Composition\Composer.cs`
 
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Composition`
+
 **Inherits:** IInstrumentTrack
 
 **Methods:**
@@ -170,13 +176,15 @@ Composer ..> MusicalEvent
 ```mermaid
 classDiagram
 IInstrumentTrack <|-- BaseInstrumentTrack
-BaseInstrumentTrack ..> KeyScale
 BaseInstrumentTrack ..> IInstrumentTrack
+BaseInstrumentTrack ..> KeyScale
 ```
 
 
 ### HarmonyTrack: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Composition\HarmonyTrack.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Composition`
 
 **Inherits:** BaseInstrumentTrack
 
@@ -185,13 +193,15 @@ BaseInstrumentTrack ..> IInstrumentTrack
 classDiagram
 BaseInstrumentTrack <|-- HarmonyTrack
 HarmonyTrack ..> BaseInstrumentTrack
-HarmonyTrack ..> ChordProgressionLibrary
 HarmonyTrack ..> HarmonyTimelineManager
+HarmonyTrack ..> ChordProgressionLibrary
 ```
 
 
 ### MelodyTrack: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Composition\MelodyTrack.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Composition`
 
 **Inherits:** BaseInstrumentTrack
 
@@ -199,15 +209,17 @@ HarmonyTrack ..> HarmonyTimelineManager
 ```mermaid
 classDiagram
 BaseInstrumentTrack <|-- MelodyTrack
-MelodyTrack ..> RhythmPhraseGenerator
-MelodyTrack ..> PatternEvolution
-MelodyTrack ..> INoteGenerator
 MelodyTrack ..> BaseInstrumentTrack
+MelodyTrack ..> INoteGenerator
+MelodyTrack ..> PatternEvolution
+MelodyTrack ..> RhythmPhraseGenerator
 ```
 
 
 ### MusicDirector: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Composition\MusicDirector.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Composition`
 
 **Inherits:** MonoBehaviour
 
@@ -231,32 +243,38 @@ MusicDirector ..> MusicTimelineQueue
 ### HarmonySegment: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Harmony\HarmonySegment.cs`
 
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Harmony`
+
 **Methods:**
 ```mermaid
 classDiagram
-HarmonySegment ..> Chord
 HarmonySegment ..> KeyScale
+HarmonySegment ..> Chord
 ```
 
 
 ### HarmonyTimelineManager: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Harmony\HarmonyTimelineManager.cs`
 
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Harmony`
+
 **Methods:**
 - `void RequestTransition(KeyScale newTarget)`
 - `List<Chord> GetNextChords(int maxBars)`
 ```mermaid
 classDiagram
-HarmonyTimelineManager ..> Chord
 HarmonyTimelineManager ..> KeyScale
-HarmonyTimelineManager ..> Queue
+HarmonyTimelineManager ..> Chord
 HarmonyTimelineManager ..> ChordProgressionLibrary
 HarmonyTimelineManager ..> HarmonySegment
+HarmonyTimelineManager ..> Queue
 ```
 
 
 ### MusicTimelineQueueData: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Playback\MusicTimelineQueue.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Playback`
 
 **Methods:**
 - `float GetNextBarStart(int beatsPerBar)`
@@ -267,14 +285,16 @@ HarmonyTimelineManager ..> HarmonySegment
 ```mermaid
 classDiagram
 MusicTimelineQueueData ..> IEnumerable
+MusicTimelineQueueData ..> MusicalEvent
 MusicTimelineQueueData ..> Scheduled
 MusicTimelineQueueData ..> IEnumerable
-MusicTimelineQueueData ..> MusicalEvent
 ```
 
 
 ### Scheduled: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Playback\MusicTimelineQueue.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Playback`
 
 **Methods:**
 ```mermaid
@@ -285,6 +305,8 @@ Scheduled ..> MusicalEvent
 
 ### MusicTimelineQueue: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Playback\MusicTimelineQueue.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Playback`
 
 **Inherits:** MonoBehaviour
 
@@ -298,15 +320,17 @@ Scheduled ..> MusicalEvent
 classDiagram
 MonoBehaviour <|-- MusicTimelineQueue
 MusicTimelineQueue ..> IEnumerable
-MusicTimelineQueue ..> Scheduled
-MusicTimelineQueue ..> IEnumerable
 MusicTimelineQueue ..> MonoBehaviour
 MusicTimelineQueue ..> MusicalEvent
+MusicTimelineQueue ..> Scheduled
+MusicTimelineQueue ..> IEnumerable
 ```
 
 
 ### BiomeMusicSettings: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Settings\BiomeMusicSettings.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Settings`
 
 **Inherits:** ScriptableObject
 
@@ -316,16 +340,18 @@ MusicTimelineQueue ..> MusicalEvent
 ```mermaid
 classDiagram
 ScriptableObject <|-- BiomeMusicSettings
-BiomeMusicSettings ..> MelodyPaceMapping
 BiomeMusicSettings ..> InstrumentPreset
-BiomeMusicSettings ..> EmotionMapping
-BiomeMusicSettings ..> ScaleProfile
 BiomeMusicSettings ..> ScriptableObject
+BiomeMusicSettings ..> MelodyPaceMapping
+BiomeMusicSettings ..> ScaleProfile
+BiomeMusicSettings ..> EmotionMapping
 ```
 
 
 ### InstrumentPreset: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Settings\BiomeMusicSettings.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Settings`
 
 **Methods:**
 
@@ -334,6 +360,8 @@ BiomeMusicSettings ..> ScriptableObject
 
 ### ScaleProfile: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Settings\BiomeMusicSettings.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Settings`
 
 **Methods:**
 ```mermaid
@@ -345,6 +373,8 @@ ScaleProfile ..> ScaleType
 ### EmotionMapping: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Settings\BiomeMusicSettings.cs`
 
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Settings`
+
 **Methods:**
 ```mermaid
 classDiagram
@@ -355,6 +385,8 @@ EmotionMapping ..> ScaleType
 ### MelodyPaceMapping: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Settings\BiomeMusicSettings.cs`
 
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Settings`
+
 **Methods:**
 
 
@@ -362,6 +394,8 @@ EmotionMapping ..> ScaleType
 
 ### MusicGenSettings: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Settings\MusicGenSettings.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Settings`
 
 **Inherits:** ScriptableObject
 
@@ -374,14 +408,16 @@ EmotionMapping ..> ScaleType
 ```mermaid
 classDiagram
 ScriptableObject <|-- MusicGenSettings
-MusicGenSettings ..> Action
 MusicGenSettings ..> ScriptableObject
+MusicGenSettings ..> Action
 MusicGenSettings ..> Action
 ```
 
 
 ### MusicGenSettingsLoader: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Settings\MusicGenSettingsLoader.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Settings`
 
 **Inherits:** MonoBehaviour
 
@@ -397,6 +433,8 @@ MusicGenSettingsLoader ..> MonoBehaviour
 ### TestMusicSetup: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Test\TestMusicSetup.cs`
 
+**Namespace:** `None`
+
 **Inherits:** MonoBehaviour
 
 **Methods:**
@@ -406,13 +444,15 @@ MusicGenSettingsLoader ..> MonoBehaviour
 ```mermaid
 classDiagram
 MonoBehaviour <|-- TestMusicSetup
-TestMusicSetup ..> MonoBehaviour
 TestMusicSetup ..> MusicDirector
+TestMusicSetup ..> MonoBehaviour
 ```
 
 
 ### Chord: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Core\Chords\Chord.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Core.Chords`
 
 **Methods:**
 - `void BuildNotes()`
@@ -421,13 +461,15 @@ TestMusicSetup ..> MusicDirector
 - `List<Note> GetArpeggio(ArpeggioStyle style, int octaves)`
 ```mermaid
 classDiagram
-Chord ..> Note
 Chord ..> ArpeggioStyle
+Chord ..> Note
 ```
 
 
 ### MusicalEvent: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Core\Events\MusicalEvent.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Core.Events`
 
 **Methods:**
 
@@ -436,6 +478,8 @@ Chord ..> ArpeggioStyle
 
 ### MelodyPhrase: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Core\Melody\MelodyPhrase.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Core.Melody`
 
 **Methods:**
 - `MelodyPhrase Clone()`
@@ -447,6 +491,8 @@ MelodyPhrase ..> Note
 
 ### MelodyPhraseExtensions: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Core\Melody\MelodyPhraseExtensions.Basic.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Core.Melody`
 
 **Methods:**
 - `MelodyPhrase Transpose(this MelodyPhrase, int semitones)`
@@ -463,8 +509,8 @@ MelodyPhrase ..> Note
 - `void InsertMusicalNote(this MelodyPhrase, KeyScale scale, Random rng)`
 ```mermaid
 classDiagram
-MelodyPhraseExtensions ..> Note
 MelodyPhraseExtensions ..> KeyScale
+MelodyPhraseExtensions ..> Note
 MelodyPhraseExtensions ..> Random
 MelodyPhraseExtensions ..> MelodyPhrase
 ```
@@ -472,6 +518,8 @@ MelodyPhraseExtensions ..> MelodyPhrase
 
 ### Note: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Core\Notes\Note.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Core.Notes`
 
 **Methods:**
 
@@ -481,17 +529,21 @@ MelodyPhraseExtensions ..> MelodyPhrase
 ### NoteMap: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Core\Notes\NoteMap.cs`
 
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Core.Notes`
+
 **Methods:**
 - `Note GetNote(int midiNote)`
 ```mermaid
 classDiagram
-NoteMap ..> Dictionary
 NoteMap ..> Note
+NoteMap ..> Dictionary
 ```
 
 
 ### NoteUtilities: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Core\Notes\NoteUtilities.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Core.Notes`
 
 **Methods:**
 - `float MidiToFrequency(int midiNote)`
@@ -509,20 +561,24 @@ NoteUtilities ..> Note
 ### RhythmPhrase: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Core\Rythm\RhythmPhrase.cs`
 
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Core.Rhythm`
+
 **Methods:**
 - `RhythmPhrase Clone()`
 - `IEnumerable<RhythmPhraseElement> LongestElements()`
 - `IEnumerable<RhythmPhraseElement> ShortestElements()`
 ```mermaid
 classDiagram
+RhythmPhrase ..> IEnumerable
+RhythmPhrase ..> IEnumerable
 RhythmPhrase ..> RhythmPhraseElement
-RhythmPhrase ..> IEnumerable
-RhythmPhrase ..> IEnumerable
 ```
 
 
 ### RhythmPhraseExtensions: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Core\Rythm\RhythmPhraseExtensions.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Core.Rhythm`
 
 **Methods:**
 - `void NormalizeToBeats(this RhythmPhrase, float targetBeats)`
@@ -532,6 +588,8 @@ RhythmPhrase ..> IEnumerable
 
 ### RhythmPhraseGenerator: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Core\Rythm\RhythmPhraseGenerator.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Core.Rhythm`
 
 **Methods:**
 - `RhythmPhrase GenerateSmart(int beatsPerBar, int numBars, int numHits, FillStrategy strategy, int seed, bool randomizeOrder)`
@@ -544,13 +602,15 @@ RhythmPhrase ..> IEnumerable
 - `float TryDouble(float dur)`
 ```mermaid
 classDiagram
-RhythmPhraseGenerator ..> RhythmPhrase
 RhythmPhraseGenerator ..> FillStrategy
+RhythmPhraseGenerator ..> RhythmPhrase
 ```
 
 
 ### KeyScale: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Core\Scales\KeyScale.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Core.Scales`
 
 **Methods:**
 - `void BuildNotes()`
@@ -570,6 +630,8 @@ KeyScale ..> Note
 ### ScaleIntervals: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Core\Scales\ScaleType.cs`
 
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Core.Scales`
+
 **Methods:**
 
 
@@ -577,6 +639,8 @@ KeyScale ..> Note
 
 ### ScaleUtils: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Core\Scales\ScaleUtils.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Core.Scales`
 
 **Methods:**
 - `HashSet<int> PitchClasses(KeyScale ks)`
@@ -595,6 +659,8 @@ ScaleUtils ..> KeyScale
 ### ChordProgressionGenerator: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Generators\Chord\ChordProgressionGenerator.cs`
 
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Generators`
+
 **Methods:**
 - `List<Chord> Generate(KeyScale startKey, int numChords, int seed, KeyScale targetKey, float modulationBias)`
 - `void ResetState()`
@@ -606,13 +672,15 @@ ScaleUtils ..> KeyScale
 - `float BaseFunctionalScore(int from, int to)`
 ```mermaid
 classDiagram
-ChordProgressionGenerator ..> Chord
 ChordProgressionGenerator ..> KeyScale
+ChordProgressionGenerator ..> Chord
 ```
 
 
 ### ChordProgressionLibrary: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Generators\Chord\ChordProgressionLibrary.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Generators`
 
 **Methods:**
 - `List<Chord> GetProgression(KeyScale key, int variant, bool useSevenths)`
@@ -627,6 +695,8 @@ ChordProgressionLibrary ..> KeyScale
 ### INoteGenerator: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Generators\Note\INoteGenerator.cs`
 
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Generators.NoteGen`
+
 **Methods:**
 
 
@@ -634,6 +704,8 @@ ChordProgressionLibrary ..> KeyScale
 
 ### MarkovMelodyGenerator: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Generators\Note\MarkovMelodyGenerator.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Generators.NoteGen`
 
 **Inherits:** INoteGenerator
 
@@ -648,14 +720,16 @@ ChordProgressionLibrary ..> KeyScale
 ```mermaid
 classDiagram
 INoteGenerator <|-- MarkovMelodyGenerator
-MarkovMelodyGenerator ..> Note
-MarkovMelodyGenerator ..> KeyScale
 MarkovMelodyGenerator ..> INoteGenerator
+MarkovMelodyGenerator ..> KeyScale
+MarkovMelodyGenerator ..> Note
 ```
 
 
 ### RuleMelodyGenerator: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Generators\Note\RuleMelodyGenerator.cs`
+
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Generators.NoteGen`
 
 **Inherits:** INoteGenerator
 
@@ -675,6 +749,8 @@ RuleMelodyGenerator ..> INoteGenerator
 ### PatternEvolution: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Generators\Pattern\PatternEvolution.cs`
 
+**Namespace:** `SymphonyOfBiomes.Audio.MusicGen.Composition`
+
 **Methods:**
 - `void Initialize(KeyScale key, int bars, int beatsPerBar, int melodyHits, int melodyOctaves)`
 - `void Mutate(KeyScale key, int bars, int beatsPerBar, int melodyHits)`
@@ -682,16 +758,18 @@ RuleMelodyGenerator ..> INoteGenerator
 - `MelodyPhrase MutateMelody(MelodyPhrase baseMelody, KeyScale key)`
 ```mermaid
 classDiagram
-PatternEvolution ..> RhythmPhrase
 PatternEvolution ..> KeyScale
+PatternEvolution ..> MelodyPhrase
+PatternEvolution ..> RhythmPhrase
 PatternEvolution ..> INoteGenerator
 PatternEvolution ..> RhythmPhraseGenerator
-PatternEvolution ..> MelodyPhrase
 ```
 
 
 ### MusicTimelineQueueEditor: 
 **File:** `C:\Users\jange\MusicGeneration\Assets\_Project\Audio\MusicGen\Playback\Editor\MusicTimelineQueueEditor.cs`
+
+**Namespace:** `None`
 
 **Inherits:** Editor
 

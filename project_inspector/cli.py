@@ -3,14 +3,14 @@ import argparse
 import sys
 from pathlib import Path
 
-from writers.md_writer import MarkdownWriter
-from writers.txt_writer import TextWriter
-from writers.html_writer import HTMLWriter
-from writers.mermaid_writer import MermaidWriter
+from project_inspector.writers.md_writer import MarkdownWriter
+from project_inspector.writers.txt_writer import TextWriter
+from project_inspector.writers.html_writer import HTMLWriter
+from project_inspector.writers.mermaid_writer import MermaidWriter
 
 
-from analyzers.folder_tree import FolderTreeAnalyzer
-from analyzers.cs_parser import CSharpParser
+from project_inspector.analyzers.folder_tree import FolderTreeAnalyzer
+from project_inspector.analyzers.cs_parser import CSharpParser
 
 
 def main():
@@ -26,7 +26,7 @@ def main():
     parser.add_argument("--methods", action="store_true", help="List methods")
     parser.add_argument("--summaries", action="store_true", help="Extract XML doc summaries")
     parser.add_argument("--mermaid", action="store_true", help="Generate Mermaid class diagram")
-
+    parser.add_argument("--version", action="version", version="project-inspector 0.1.0")
     parser.add_argument("--output", "-o", type=str, help="Write to file instead of stdout")
     parser.add_argument("--format", "-f", default="md", choices=["md", "txt", "html"],
                         help="Output format (default: md)")

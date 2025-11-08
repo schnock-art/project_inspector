@@ -1,7 +1,21 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "project-inspector"
+name = "project_inspector"
 version = "0.1.0"
-description = "Add your description here"
+description = "CLI tool to document and visualize Unity/C# projects with Mermaid diagrams."
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.9"
 dependencies = []
+
+[project.scripts]
+project_inspector = "project_inspector.cli:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
+    "flake8"
+]

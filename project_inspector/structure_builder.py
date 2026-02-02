@@ -95,12 +95,13 @@ class TreeStructureBuilder:
 
         paths_by_depth = {-1: root_path}
         for idx, entry in enumerate(entries):
-            name = self._clean_name(entry.name)
+            raw_name = entry.name
+            name = self._clean_name(raw_name)
             depth = entry.depth
             parent = paths_by_depth.get(depth - 1, root_path)
             current_path = parent / name
 
-            is_dir = self._is_directory(name, entries, idx)
+            is_dir = self._is_directory(raw_name, entries, idx)
             if is_dir:
                 current_path.mkdir(parents=True, exist_ok=True)
                 paths_by_depth[depth] = current_path

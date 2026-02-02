@@ -99,6 +99,28 @@ usage: project_inspector [options] <path>
 project_inspector --tree ./Assets
 ```
 
+### 🧱 Create Folders/Files from a Tree File
+
+Provide a `folder_tree_structure.md` (or any `.md`) containing a tree like:
+
+```text
+MyProject
+├── Assets
+│   └── Scripts
+│       └── PlayerController.cs
+└── README.md
+```
+
+Then run:
+
+```bash
+project_inspector --build-tree folder_tree_structure.md --target .
+```
+
+Notes:
+* Directories with no children are assumed to be folders unless they have a file extension.
+* Add a trailing `/` to force an entry to be treated as a directory.
+
 ### 🧱 Extract Classes and Methods
 
 ```bash
